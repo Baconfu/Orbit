@@ -27,13 +27,21 @@ class ThreeBody:
         
         self.w = 10
         self.h = 10
-        self.grid = ["" for i in range(0,self.w*self.h)]
+        self.grid = ["" for i in range(0,(600//self.w)*(600//self.h))]
         
         self.run()
     def check(self,xpos,ypos):
-        return 
+        out = self.grid[int(ypos//self.h*self.w+xpos//self.w)].split(",")
+        if len(out)>1:
+            out2=[]
+            for i in range(1,len(out)):
+                out2.append(int(out[i]))
+            return out2
+        else:
+            return []
+        
     def register(self,x,y,pid):
-        self.grid[y//self.h*self.w+x//self.x] = self.grid[y//self.h*self.w+x//self.x] + ","+str(pid)
+        self.grid[int(y//self.h*self.w+x//self.w)] = self.grid[int(y//self.h*self.w+x//self.w)] + ","+str(pid)
         
     def run(self):
         obj = []
@@ -42,6 +50,14 @@ class ThreeBody:
             for planet in self.planets:
                 planet.xa=0
                 planet.ya=0
+            for i in range(0,len(self.planets)):
+                p = self.planets[i]
+                plist = self.check(p.x,p.y)
+                if len(plist)>0:
+                    print(plist)
+                self.register(p.x,p.y,i)
+            self.grid = ["" for i in range(self.w*self.h)]
+                           
             for i in range(0,len(self.planets)-1):
                 p1 = self.planets[i]
                 for j in range(i+1,len(self.planets)):
